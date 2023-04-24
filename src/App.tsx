@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Spline from "@splinetool/react-spline";
+import { useState } from "react";
+import Scoreboard from "./components/Scoreboard";
+import { useCollisionHandler } from "./hooks/useCollistionHandler";
+import { useSpline } from "./hooks/useSpline";
 
-function App() {
+export default function App() {
+  const [score, setScore] = useState(0);
+  const [spline, setSpline] = useSpline();
+
+  // Handle collisions
+  useCollisionHandler(
+    spline,
+    (value) => setScore((score) => score + value),
+    () => {
+      alert("You win! 🎉");
+    }
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="h-screen">
+      <Spline
+        scene={process.env.REACT_APP_SPLINE_URL as string}
+        onLoad={(spline: any) => setSpline(spline)}
+      />
+      <Scoreboard score={score} />)
     </div>
   );
 }
-
-export default App;
