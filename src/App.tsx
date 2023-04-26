@@ -9,12 +9,14 @@ export default function App() {
   const [spline, setSpline] = useSpline();
 
   // Handle collisions
-  useCollisionHandler(
-    spline,
-    (value) => setScore((score) => score + value),
-    () => {
-      alert("You win! 🎉");
-    }
+  useCollisionHandler(spline, (value) =>
+    setScore((score: number) => {
+      const newScore = score + value;
+      if (newScore >= (process.env.REACT_APP_GOAL_SCORE as unknown as number)) {
+        console.log("You win! 🎉");
+      }
+      return newScore;
+    })
   );
 
   return (
